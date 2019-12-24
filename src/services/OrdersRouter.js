@@ -20,6 +20,8 @@ router.get('/orders/place/desc', Orders.getOrdersByPlaceDesc );
 
 router.get('/orders/customerId', Orders.getOrdersByCustomerId );
 
+router.get('/orders/groups', Orders.getGroupedOrders );
+
 router.post('/add', Orders.addOrder );
 
 router.post('/delete', Orders.deleteOrder );

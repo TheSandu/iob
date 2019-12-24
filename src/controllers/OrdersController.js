@@ -78,6 +78,16 @@ class OrdersController {
         }
     }
 
+    async getGroupedOrders( req, res, next ) {
+        try {
+            let orders = await Order.getGroupedOrders( );
+            res.send( orders );
+        } catch (error) {
+            console.log( error.message );
+            res.send({ error: error.message });
+        }
+    }
+
     async addOrder( req, res, next ) {
         try {
             let order = await Order.addOrder( req.body.table, req.body.place, req.body.state );

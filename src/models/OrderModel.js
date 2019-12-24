@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 const TimeTableModel = require("../models/TimeTableModel");
 let TimeTable = new TimeTableModel();
 
-
 const OrderSchema = new Schema({
     _id: Schema.Types.ObjectId,
     customer_id: Schema.Types.ObjectId,
@@ -17,6 +16,8 @@ const OrderSchema = new Schema({
 });
 
 let OrderModel = mongoose.model( 'orders', OrderSchema );
+
+const OrderAggregate = OrderModel.aggregate();
 
 class Order {
     async getOrders( ) {
@@ -46,6 +47,12 @@ class Order {
     async getOrdersByCustomerId( customer_id ) {
         return await OrderModel.find({ customer_id: customer_id });
     }
+
+    async getGroupedOrders( ) {
+        return await OrderModel.aggregate([{ $group: { _id:"$customer_id", items:{ $push: { state:"$state", create_date: "$create_date" } } } }]);
+    }
+
+    
 
     async addOrder( table, place, state ) {
         let lastOrder = await this.getOrderByPlaceDesc( table, place );
