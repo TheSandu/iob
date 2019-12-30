@@ -16,6 +16,8 @@ router.get('/items/date', TimeTable.getTimeTableItemsByDate );
 
 router.get('/items/place', TimeTable.getTimeTableItemsByPlace );
 
+router.get('/items/barmanId', TimeTable.getTimeTableItemsByBarmanId );
+
 router.post('/add', TimeTable.addTimeTableItem );
 
 router.post('/delete', TimeTable.deleteTimeTableItem );

@@ -56,6 +56,16 @@ class BarmansController {
             console.log( error.message );
             res.send({ error: error.message });
         }
+    };
+
+    async getTimeTableItemsByBarmanId( req, res, next ) {
+        try {
+            let timeTableItems = await TimeTable.getTimeTableItemsByBarmanId( req.query.barmanId );
+            res.send( timeTableItems );
+        } catch (error) {
+            console.log( error.message );
+            res.send({ error: error.message });
+        }
     }; 
 
     async addTimeTableItem( req, res, next ) {

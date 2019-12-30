@@ -12,7 +12,7 @@ const OrderSchema = new Schema({
     place: Number,
     state: { type: String, enum: [ "Refill", "Fill", "Finish" ] },
     barman_id: Schema.Types.ObjectId,
-    create_date: { type: Date, default: Date.now },
+    create_date: { type: Date, default: Date.now() },
 });
 
 let OrderModel = mongoose.model( 'orders', OrderSchema );
@@ -52,7 +52,9 @@ class Order {
         return await OrderModel.aggregate([{ $group: { _id:"$customer_id", items:{ $push: { state:"$state", create_date: "$create_date" } } } }]);
     }
 
-    
+    async getOrdersByBarmanId( barmanId ) {
+        return await OrderModel.find({ barman_id: barmanId });
+    }
 
     async addOrder( table, place, state ) {
         let lastOrder = await this.getOrderByPlaceDesc( table, place );
@@ -61,7 +63,12 @@ class Order {
 
         if( !lastOrder || lastOrder.state == "Finish" ) {
             customer_id = new mongoose.Types.ObjectId();
-            barmanId = TimeTable.getTimeTableItem( Date.now(), table, place ).barman_id;
+
+            let date = new Date();
+            let timeTable = await TimeTable.getTimeTableItem( `${ date.getFullYear() }-${ date.getMonth() + 1 }-${ date.getDate() }`, table, place );
+            if( !timeTable )
+                return "Barman is not deffined";
+            barmanId = timeTable.barman_id;
         }
         else {
             customer_id = lastOrder.customer_id;

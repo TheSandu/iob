@@ -33,6 +33,10 @@ class TimeTable {
         return await TimeTableModel.find({ table: table, place: place });
     }
 
+    async getTimeTableItemsByBarmanId( barmanId ) {
+        return await TimeTableModel.find({ barman_id: barmanId });
+    }
+
     async addTimeTableItem( date, table, place, barmanId ) {
         let barman = new TimeTableModel({
             _id: new mongoose.Types.ObjectId(),
