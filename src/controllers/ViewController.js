@@ -15,17 +15,23 @@ class ViewController {
     async homePage( req, res, next ) {
       try {
 
-          let barmans = await Barmans.getBarmans();
-          let ordersCount = [];
+         let barmans = await Barmans.getBarmans();
+         let timeMinutes = [];
 
-          for (const barman of barmans) {
-            let orders = await Order.getOrdersByBarmanId( barman._id );
-            ordersCount.push( orders.length );
-          }
+         for (const barman of barmans) {
+           let work = await Barmans.getBarmansWorkTime( barman._id );
+           timeMinutes.push( work.time );
+         }
 
-          barmans = barmans.map( barman => barman.name );
+         let barmanDiscounts = [];
+         for (const barman of barmans) {
+           let discount = await Barmans.getBarmansDiscountWorkTime( barman._id );
+           barmanDiscounts.push( discount );
+         }
 
-        return res.render( "home-page.ejs", { barmans: barmans, ordersCount: ordersCount } );
+         barmans = barmans.map( barman => barman.name );
+
+        return res.render( "home-page.ejs", { barmans: barmans, barmanDiscounts: barmanDiscounts,timeMinutes: timeMinutes } );
      } catch ( error ) {
         console.log( error.message );
         res.send( error );

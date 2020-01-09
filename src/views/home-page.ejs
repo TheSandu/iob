@@ -122,7 +122,7 @@
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="mb-3">Bar chart</h4>
+                                <h4 class="mb-3">Work chart</h4>
                                 <canvas id="barChart"></canvas>
                             </div>
                         </div>
@@ -132,6 +132,24 @@
             </div>
         </div>
 
+        <div class="content mt-3">
+            <div class="animated fadeIn">
+                <div class="row">
+
+                    <% barmanDiscounts.forEach( ( barmanDiscount ) => {  %>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="mb-3"> <%= barmanDiscount.name %> </h4>
+                                    <canvas id="<%= barmanDiscount.id %>"></canvas>
+                                </div>
+                            </div>
+                        </div><!-- /# column -->
+                    <% }); %>
+
+                </div>
+            </div>
+        </div>
     </div><!-- /#right-panel -->
 
     <!-- Right Panel -->
@@ -144,7 +162,6 @@
 
     <!--  Chart js -->
     <script src="../public/vendors/chart.js/dist/Chart.bundle.min.js"></script>
-    <script src="../public/assets/js/widgets.js"></script>
 
     <script>
         (async () => {
@@ -152,14 +169,14 @@
             var ctx = document.getElementById( "barChart" );
 
             let barmansNames = "<%= barmans %>".split(",");
-            let ordersCount = "<%= ordersCount %>".split(",");
+            let ordersCount = "<%= timeMinutes %>".split(",");
 
             var myChart = new Chart( ctx, {
                 type: 'bar',
                 data: {
                     labels: barmansNames,
                     datasets: [{
-                        label: "Deserviri",
+                        label: "Minute",
                         data: ordersCount,
                         borderColor: "rgba(0, 123, 255, 0.9)",
                         borderWidth: "0",
@@ -176,6 +193,65 @@
                     }
                 }
             } );
+
+
+            <% barmanDiscounts.forEach( ( barmanDiscount ) => {  %>
+                var ctx = document.getElementById( "<%= barmanDiscount.id %>" );
+                var discount = "<%= barmanDiscount.discountsTime %>".split(",");
+                ctx.height = 150;
+
+                if( discount[0] == 0 && discount[1] == 0 && discount[2] == 0 ) {
+                    var myChart = new Chart( ctx, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [ {
+                                data: [1],
+                                backgroundColor: [
+                                                    "rgba(135, 135, 135,0.9)",
+                                                ],
+                                hoverBackgroundColor: [
+                                                    "rgba(135, 135, 135,0.9)",
+                                                ]
+    
+                                            } ],
+                            labels: [
+                                            "Nu are comenzi",
+                                        ]
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    });
+                } else {
+                    var myChart = new Chart( ctx, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [ {
+                                data: discount,
+                                backgroundColor: [
+                                    "rgba(255, 0, 0,0.5)",
+                                    "rgba(255, 0, 0,0.7)",
+                                    "rgba(255, 0, 0,0.9)",
+                                                ],
+                                hoverBackgroundColor: [
+                                    "rgba(255, 0, 0,0.5)",
+                                    "rgba(255, 0, 0,0.7)",
+                                    "rgba(255, 0, 0,0.9)",
+                                                ]
+    
+                                            } ],
+                            labels: [
+                                            "None",
+                                            "5%",
+                                            "10%",
+                                        ]
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    });
+                }
+            <% }); %>
         })().then();
     </script>
 

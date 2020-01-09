@@ -18,6 +18,16 @@ class BarmansController {
      }
     }
 
+    async getBarmansWorkTime( req, res, next ) {
+        try {
+            let time = await Barman.getBarmansWorkTime( req.query.id );
+            res.send( time );
+        } catch ( error ) {
+           console.log( error.message );
+           res.send( error );
+        }
+    }
+
     async getBarmanById( req, res, next ) {
         try {
             let barman = await Barman.getBarmanById( req.query.id );

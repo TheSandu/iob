@@ -12,8 +12,11 @@ router.get('/id', Barmans.getBarmanById );
 
 router.get('/name', Barmans.getBarmanByName );
 
+router.get('/workTime', Barmans.getBarmansWorkTime );
+
 router.post('/add', Barmans.addBarman );
 
 router.post('/delete', Barmans.deleteBarman );
 
 module.exports = router;
+

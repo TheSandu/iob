@@ -10,7 +10,7 @@ const OrderSchema = new Schema({
     customer_id: Schema.Types.ObjectId,
     table: Number,
     place: Number,
-    state: { type: String, enum: [ "Refill", "Fill", "Finish" ] },
+    state: { type: String, enum: [ "Refill", "Fill", "Change","Finish" ] },
     barman_id: Schema.Types.ObjectId,
     create_date: { type: Date, default: Date.now() },
 });
